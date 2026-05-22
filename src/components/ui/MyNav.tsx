@@ -13,7 +13,11 @@ let MyNav = () => {
 
         <div className="flex items-center gap-3">
           <div className="flex w-[97px] h-[36px] py-2 px-4 justify-center items-center gap-2 rounded-[8px] border-[1px] border-solid border-[#E4E4E7]">
-            <ChevronDown width={20} height={20}></ChevronDown>
+            <ChevronDown
+              className="min-w-4"
+              min-width={10}
+              height={20}
+            ></ChevronDown>
             <h3>Genre</h3>
           </div>
           <div className="w-[379px] h-[36px] px-3 flex items-center gap-2.5 rounded-[8px] border-[1px] border-solid border-[#E4E4E7]">

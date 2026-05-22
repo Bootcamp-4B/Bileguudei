@@ -11,7 +11,7 @@ import Image from "next/image";
 
 type MovieCardProps = {
   imgUrl: string;
-  rating?: number;
+  rating: number;
   title: string;
 };
 
@@ -19,7 +19,13 @@ const MovieCard = ({ imgUrl, rating = 6.9, title }: MovieCardProps) => {
   return (
     <Card className="w-[230px] gap-0 py-0">
       <div className="relative h-[340px] w-full">
-        <Image alt={title} src={imgUrl} fill className="object-cover" />
+        <Image
+          alt={title}
+          src={imgUrl}
+          fill
+          sizes="(max-width: 768px) 100vw, 20vw"
+          className="object-cover"
+        />
       </div>
 
       <CardFooter className="flex flex-col items-start gap-2 px-3">

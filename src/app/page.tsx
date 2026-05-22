@@ -1,28 +1,31 @@
+"use client";
 import Image from "next/image";
 import MovieCard from "@/components/ui/MovieCard";
 import MyCarousel from "@/components/ui/MyCarousel";
 import MyNav from "@/components/ui/MyNav";
+import { GroupMovie } from "@/components/ui/GroupMovie";
 
 export default function Home() {
-  const slides = ["/slide1.jpg", "/slide2.jpg"];
+  const slides = [
+    {
+      title: "Wicked",
+      rating: 6.9,
+      description:
+        "Elphaba, a misunderstood young woman because of her green skin, and Glinda, a popular girl, become friends at Shiz University in the Land of Oz. After an encounter with the Wonderful Wizard of Oz, their friendship reaches a crossroads. ",
+      imageUrl: "/slide1.jpg",
+    },
+    { imageUrl: "/slide2.jpg" },
+  ];
+
   return (
-    <div className="flex flex-col gap-[30px]">
+    <div className="flex flex-col gap-[30px] ">
       <MyNav></MyNav>
+
       <MyCarousel slideArray={slides}></MyCarousel>
 
-      <div id="Upcoming" className="flex w-full gap-[32px] px-[80px]">
-        <MovieCard
-          imgUrl={"/Slide 4_3 - 1.png"}
-          title={"Dear Santa"}
-        ></MovieCard>
-        <MovieCard
-          imgUrl={"/movie2.jpg"}
-          title={"How To Train Your Dragon Live Action"}
-        ></MovieCard>
-        <MovieCard imgUrl={"/movie3.jpg"} title={"Alien Romulus"}></MovieCard>
-        <MovieCard imgUrl={"/movie4.jpg"} title={"From the Ashes"}></MovieCard>
-        <MovieCard imgUrl={"/movie5.jpg"} title={"Space Dogg"}></MovieCard>
-      </div>
+      <GroupMovie groupName="Upcoming"></GroupMovie>
+      <GroupMovie groupName="Popular"></GroupMovie>
+      <GroupMovie groupName="Top rated"></GroupMovie>
     </div>
   );
 }
