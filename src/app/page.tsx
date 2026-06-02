@@ -1,28 +1,32 @@
 "use client";
 import Image from "next/image";
-import MovieCard from "@/components/ui/MovieCard";
 import MyCarousel from "@/components/ui/MyCarousel";
 import MyNav from "@/components/ui/MyNav";
 import { GroupMovie } from "@/components/ui/GroupMovie";
 
+export interface movieType {
+  adult: boolean;
+  backdrop_path: string;
+  id: number;
+  title: string;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  poster_path: string;
+  media_type: string;
+  genre_ids: number[];
+  popularity: number;
+  release_date: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+}
+
 export default function Home() {
-  const slides = [
-    {
-      title: "Wicked",
-      rating: 6.9,
-      description:
-        "Elphaba, a misunderstood young woman because of her green skin, and Glinda, a popular girl, become friends at Shiz University in the Land of Oz. After an encounter with the Wonderful Wizard of Oz, their friendship reaches a crossroads. ",
-      imageUrl: "/slide1.jpg",
-    },
-    { imageUrl: "/slide2.jpg" },
-  ];
-
   return (
-    <div className="flex flex-col gap-[30px] ">
+    <div className="flex flex-col gap-[20px]">
       <MyNav></MyNav>
-
-      <MyCarousel slideArray={slides}></MyCarousel>
-
+      <MyCarousel></MyCarousel>
       <GroupMovie groupName="Upcoming"></GroupMovie>
       <GroupMovie groupName="Popular"></GroupMovie>
       <GroupMovie groupName="Top rated"></GroupMovie>

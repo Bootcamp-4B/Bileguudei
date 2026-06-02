@@ -1,37 +1,18 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import MovieCard from "./MovieCard";
-import { Button } from "./button";
 import { ArrowRight } from "lucide-react";
-import { Braah_One } from "next/font/google";
-
-interface movieType {
-  adult: boolean;
-  backdrop_path: string;
-  id: number;
-  title: string;
-  original_language: string;
-  original_title: string;
-  overview: string;
-  poster_path: string;
-  media_type: string;
-  genre_ids: number[];
-  popularity: number;
-  release_date: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import type { movieType } from "../../app/page";
+import { Button } from "./button";
+import MovieCard from "./MovieCard";
+import { MovieCardSkeletonList } from "./MovieCardSkeleton";
 
 interface groupNameType {
   groupName: string;
 }
 
-interface apiUrlType {
-  apiUrl: string;
-}
 export const GroupMovie = ({ groupName }: groupNameType) => {
-  let apiUrl;
+  let apiUrl: string;
   switch (groupName) {
     case "Upcoming":
       apiUrl =
@@ -59,6 +40,7 @@ export const GroupMovie = ({ groupName }: groupNameType) => {
   }
 
   const [movies, setMovies] = useState<movieType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -70,8 +52,11 @@ export const GroupMovie = ({ groupName }: groupNameType) => {
       })
       .then((response) => {
         setMovies(response.data.results);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, []);
+  }, [apiUrl]);
 
   return (
     <div className="px-[80px] flex flex-col gap-[32px]">
@@ -79,23 +64,31 @@ export const GroupMovie = ({ groupName }: groupNameType) => {
         <h2 className="w-[114px] h-[32px] text-[#09090B] text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
           {groupName}
         </h2>
-        <Button className="flex h-[36px] py-2 px-4 justify-center items-center gap-2 bg-white text-[#09090B]">
-          <p className="text-[14px] font-medium leading-[20px]">See more</p>
-          <ArrowRight width={16} height={16}></ArrowRight>
-        </Button>
+        <Link href={`/movies/${groupName.toLowerCase().replace(" ", "_")}`}>
+          <Button className="flex h-[36px] py-2 px-4 justify-center items-center gap-2 bg-white text-[#09090B]">
+            <p className="text-[14px] font-medium leading-[20px]">See more</p>
+            <ArrowRight width={16} height={16}></ArrowRight>
+          </Button>
+        </Link>
       </div>
-      <div className="grid grid-cols-5 w-full gap-[32px]">
-        {movies.length > 0 &&
+
+      <div className="grid grid-cols-5 w-full gap-[32px] justify-items-center">
+        {isLoading ? (
+          <MovieCardSkeletonList count={10} />
+        ) : (
           movies.slice(0, 10).map((movie) => {
             return (
               <MovieCard
+                cardChoice={1}
+                movieLink={movie.id}
                 imgUrl={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 title={movie.title}
                 rating={Number(movie.vote_average.toFixed(1))}
                 key={movie.id}
               ></MovieCard>
             );
-          })}
+          })
+        )}
       </div>
     </div>
   );
