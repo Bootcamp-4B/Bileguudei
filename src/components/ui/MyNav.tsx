@@ -6,7 +6,7 @@ let MyNav = () => {
     <nav className="flex w-full h-[50px] px-4 items-end justify-center">
       <div className="flex justify-between w-[1280px] h-[36px]">
         <Link href={"/"}>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-2">
             <Film width={20} height={20} stroke="#4338CA"></Film>
             <h2 className="text-[#4338CA] text-4 italic Inter font-bold leading-[20px] tracking-[0.32px]">
               Movie Z

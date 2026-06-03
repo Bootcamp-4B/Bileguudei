@@ -68,7 +68,6 @@ export const MovieDetails = () => {
   const params = useParams();
 
   const [movie, setMovie] = useState<movieDetailsType | null>(null);
-
   const [directing, setDirecting] = useState<crewType[]>([]);
   const [writing, setWriting] = useState<crewType[]>([]);
   const [stars, setStars] = useState<crewType[]>([]);

@@ -1,33 +1,28 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-// Тогтвортой түлхүүрүүд — render болгонд шинээр үүсгэхгүйн тулд модулийн түвшинд нэг л удаа.
-const SKELETON_KEYS = Array.from(
-  { length: 30 },
-  (_, i) => `movie-skeleton-${i}`,
-);
-
 export const MovieCardSkeleton = ({ className }: { className?: string }) => {
   return (
-    <div className={cn("flex w-[230px] flex-col gap-3", className)}>
-      <Skeleton className="h-[340px] w-full rounded-xl" />
-      <Skeleton className="h-5 w-12" />
-      <Skeleton className="h-5 w-3/4" />
+    <div className={cn("flex flex-col gap-3 w-[230px]", className)}>
+      <Skeleton className="w-full h-[340px] rounded-xl" />
+      <Skeleton className="w-12 h-5" />
+      <Skeleton className="w-3/4 h-5" />
     </div>
   );
 };
 
 export const MovieCardSkeletonList = ({
-  count = 10,
+  count,
   className,
 }: {
-  count?: number;
+  count: number;
   className?: string;
 }) => {
+  const items = Array.from({ length: count }, (_, index) => index);
   return (
     <>
-      {SKELETON_KEYS.slice(0, count).map((key) => (
-        <MovieCardSkeleton key={key} className={className} />
+      {items.map((item) => (
+        <MovieCardSkeleton key={`skeleton-${item}`} className={className} />
       ))}
     </>
   );

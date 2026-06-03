@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -34,11 +35,12 @@ export const MovieSimilar = () => {
         <h2 className="w-[198px] h-[32px] text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
           More like this
         </h2>
-
-        <Button className="flex h-[36px] py-2 px-4 justify-center items-center gap-2 bg-white text-[#09090B]">
-          <p className="text-[14px] font-medium leading-[20px]">See more</p>
-          <ArrowRight width={16} height={16}></ArrowRight>
-        </Button>
+        <Link href={`/${params.id}/similar`}>
+          <Button className="flex h-[36px] py-2 px-4 justify-center items-center gap-2 bg-white text-[#09090B]">
+            <p className="text-[14px] font-medium leading-[20px]">See more</p>
+            <ArrowRight width={16} height={16}></ArrowRight>
+          </Button>
+        </Link>
       </div>
 
       <div className="w-full h-[372px] flex gap-[32px]">

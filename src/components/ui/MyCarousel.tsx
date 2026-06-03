@@ -9,7 +9,6 @@ import { Button } from "./button";
 import { Play, Star } from "lucide-react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Moirai_One } from "next/font/google";
 
 interface movieType {
   adult: boolean;

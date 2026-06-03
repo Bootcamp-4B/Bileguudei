@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import MyCarousel from "@/components/ui/MyCarousel";
 import MyNav from "@/components/ui/MyNav";
 import { GroupMovie } from "@/components/ui/GroupMovie";
