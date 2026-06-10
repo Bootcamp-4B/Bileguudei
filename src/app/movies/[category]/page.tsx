@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { movieType } from "@/app/page";
@@ -15,6 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { tmdb } from "@/lib/tmdb";
 
 type PageItem = number | "left-ellipsis" | "right-ellipsis";
 
@@ -41,16 +41,8 @@ export default function CategoryPage() {
 
   useEffect(() => {
     setIsLoading(true);
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${params.category}?language=en-US&page=${page}`,
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMWFjODI3ZGU0ZTkzMDE5OGE1YzI4YTAyZWYwNDMxMCIsIm5iZiI6MTc3OTI5NjIzNC4yMjUsInN1YiI6IjZhMGRlN2VhMzczYmNhZjA2OGEyYjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b1LM9DOJgB7NGZu04MmF9rsXfk5TcQbTg3i1yPZBrEE",
-          },
-        },
-      )
+    tmdb
+      .get(`/movie/${params.category}?language=en-US&page=${page}`)
       .then((response) => {
         setMovies(response.data.results);
         setTotalPages(Math.min(response.data.total_pages, 500));
@@ -66,15 +58,15 @@ export default function CategoryPage() {
   };
 
   return (
-    <div className="px-[80px] flex flex-col gap-[32px] w-full">
+    <div className="px-4 sm:px-6 lg:px-20 flex flex-col gap-[32px] w-full">
       <MyNav></MyNav>
       <div className="flex justify-between">
-        <h2 className="w-[114px] h-[32px] text-[#09090B] text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
+        <h2 className="w-[114px] h-[32px] text-foreground text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
           {params.category.charAt(0).toUpperCase() +
             params.category.slice(1).replace("_", " ")}
         </h2>
       </div>
-      <div className="grid grid-cols-5 w-full gap-[32px] justify-items-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full gap-4 lg:gap-8">
         {isLoading ? (
           <MovieCardSkeletonList count={20} />
         ) : (

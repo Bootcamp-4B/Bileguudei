@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -6,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import MovieCard from "@/components/ui/MovieCard";
 import { MovieCardSkeletonList } from "@/components/ui/MovieCardSkeleton";
+import { tmdb } from "@/lib/tmdb";
 import type { movieType } from "../../app/page";
 
 export const MovieSimilar = () => {
@@ -15,13 +15,8 @@ export const MovieSimilar = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get(`https://api.themoviedb.org/3/movie/${params.id}/similar`, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMWFjODI3ZGU0ZTkzMDE5OGE1YzI4YTAyZWYwNDMxMCIsIm5iZiI6MTc3OTI5NjIzNC4yMjUsInN1YiI6IjZhMGRlN2VhMzczYmNhZjA2OGEyYjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b1LM9DOJgB7NGZu04MmF9rsXfk5TcQbTg3i1yPZBrEE",
-        },
-      })
+    tmdb
+      .get(`/movie/${params.id}/similar`)
       .then((response) => {
         setSimilarMovies(response.data.results);
       })
@@ -30,22 +25,22 @@ export const MovieSimilar = () => {
       });
   }, [params.id]);
   return (
-    <div className="w-[1080px] h-[440px] flex flex-col gap-[32px]">
+    <div className="w-full max-w-[1080px] flex flex-col gap-[32px]">
       <div className="flex justify-between">
-        <h2 className="w-[198px] h-[32px] text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
+        <h2 className="text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
           More like this
         </h2>
         <Link href={`/${params.id}/similar`}>
-          <Button className="flex h-[36px] py-2 px-4 justify-center items-center gap-2 bg-white text-[#09090B]">
+          <Button className="flex h-[36px] py-2 px-4 justify-center items-center gap-2 bg-background text-foreground">
             <p className="text-[14px] font-medium leading-[20px]">See more</p>
             <ArrowRight width={16} height={16}></ArrowRight>
           </Button>
         </Link>
       </div>
 
-      <div className="w-full h-[372px] flex gap-[32px]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 w-full gap-4 lg:gap-8">
         {isLoading ? (
-          <MovieCardSkeletonList count={5} className="w-[190px]" />
+          <MovieCardSkeletonList count={5} />
         ) : (
           similarMovies.slice(0, 5).map((movie) => {
             return (

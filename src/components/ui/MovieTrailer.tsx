@@ -1,12 +1,12 @@
-import axios from "axios";
 import { Star } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 import { Skeleton } from "@/components/ui/skeleton";
+import { tmdb } from "@/lib/tmdb";
 
-interface trailerType {
+export interface trailerType {
   id: string;
   iso_639_1: string;
   iso_3166_1: string;
@@ -66,62 +66,54 @@ interface movieDetailsType {
 
 export const MovieTrailer = () => {
   const params = useParams();
-  const [trailer, setTrailer] = useState<trailerType[]>([]);
+  const [trailer, setTrailer] = useState<trailerType | null>(null);
 
   const [movie, setMovie] = useState<movieDetailsType | null>(null);
 
   useEffect(() => {
-    axios
-      .get(`https://api.themoviedb.org/3/movie/${params.id}`, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMWFjODI3ZGU0ZTkzMDE5OGE1YzI4YTAyZWYwNDMxMCIsIm5iZiI6MTc3OTI5NjIzNC4yMjUsInN1YiI6IjZhMGRlN2VhMzczYmNhZjA2OGEyYjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b1LM9DOJgB7NGZu04MmF9rsXfk5TcQbTg3i1yPZBrEE",
-        },
-      })
-      .then((response) => {
-        // console.log(response.data);
-        setMovie(response.data);
-      });
-    axios
-      .get(`https://api.themoviedb.org/3/movie/${params.id}/videos`, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMWFjODI3ZGU0ZTkzMDE5OGE1YzI4YTAyZWYwNDMxMCIsIm5iZiI6MTc3OTI5NjIzNC4yMjUsInN1YiI6IjZhMGRlN2VhMzczYmNhZjA2OGEyYjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b1LM9DOJgB7NGZu04MmF9rsXfk5TcQbTg3i1yPZBrEE",
-        },
-      })
-      .then((response) => {
-        setTrailer(response.data.results);
-      });
+    tmdb.get(`/movie/${params.id}`).then((response) => {
+      setMovie(response.data);
+    });
+    tmdb.get(`/movie/${params.id}/videos`).then((response) => {
+      const foundTrailer =
+        response.data.results.find(
+          (video: trailerType) =>
+            video.type === "Trailer" && video.site === "YouTube",
+        ) ??
+        response.data.results.find(
+          (video: trailerType) => video.site === "YouTube",
+        );
+
+      setTrailer(foundTrailer ?? null);
+    });
   }, [params.id]);
 
   if (!movie) {
     return (
-      <div className="w-[1080px] h-[524px] gap-5 flex flex-col">
+      <div className="w-full max-w-[1080px] gap-5 flex flex-col">
         <div className="flex flex-col gap-2">
           <Skeleton className="h-10 w-[500px]" />
           <Skeleton className="h-6 w-[120px]" />
         </div>
-        <div className="w-full h-full gap-[32px] flex">
-          <Skeleton className="w-[290px] h-[428px] rounded-xl" />
-          <Skeleton className="w-[760px] h-[428px] rounded-xl" />
+        <div className="w-full gap-[32px] flex flex-col lg:flex-row">
+          <Skeleton className="w-full max-w-[290px] aspect-[2/3] lg:aspect-auto lg:h-[428px] lg:w-[290px] rounded-xl" />
+          <Skeleton className="w-full lg:flex-1 aspect-video lg:aspect-auto lg:h-[428px] rounded-xl" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-[1080px] h-[524px] gap-5 flex flex-col">
+    <div className="w-full max-w-[1080px] gap-5 flex flex-col">
       <div className="flex w-full items-start gap-[24px] justify-between">
-        {/* movie title contianer */}
         <div className="flex flex-col items-start gap-1">
-          <h2 className="text-[#09090B] w-[500px] text-[36px] font-bold leading-[40px] tracking-[-0.9px] truncate">
+          <h2 className="text-foreground w-full sm:w-[500px] text-[24px] sm:text-[36px] font-bold leading-tight sm:leading-[40px] tracking-[-0.9px] truncate">
             {movie?.title}
           </h2>
-          <p className="text-[#09090B] text-[18px]">{movie?.release_date}</p>
+          <p className="text-foreground text-[18px]">{movie?.release_date}</p>
         </div>
-        {/* rating container */}
-        <div className="w-[83px] h-[64px] flex flex-col pr-[100px]">
-          <h3 className="text-[#09090B] text-[12px] font-medium leading-[16px] h-3">
+        <div className="w-[83px] h-[64px] flex flex-col lg:pr-[100px]">
+          <h3 className="text-foreground text-[12px] font-medium leading-[16px] h-3">
             Rating
           </h3>
           <div className="h-[48px] w-full flex flex-row items-center gap-1">
@@ -137,11 +129,11 @@ export const MovieTrailer = () => {
             <div className="flex flex-col pt-1">
               <p className="text-[18px] font-semibold h-6">
                 {movie?.vote_average ? movie.vote_average.toFixed(1) : "0.0"}
-                <span className="text-[16px] font-normal text-[#71717A]">
+                <span className="text-[16px] font-normal text-muted-foreground">
                   /10
                 </span>
               </p>
-              <p className="text-[#71717A] text-[12px] font-normal">
+              <p className="text-muted-foreground text-[12px] font-normal">
                 {movie?.vote_count}
               </p>
             </div>
@@ -149,24 +141,32 @@ export const MovieTrailer = () => {
         </div>
       </div>
 
-      <div className="w-full h-full gap-[32px] flex">
+      <div className="w-full gap-[32px] flex flex-col lg:flex-row">
         {movie?.poster_path && (
           <Image
             unoptimized
             width={290}
             height={428}
-            alt="aa"
+            alt={movie.title}
             src={`https://image.tmdb.org/t/p/original${movie.poster_path}`}
             loading="eager"
+            className="w-full max-w-[290px] aspect-[2/3] lg:aspect-auto lg:h-[428px] lg:w-[290px] mx-auto lg:mx-0 shrink-0 object-cover rounded-md"
           ></Image>
         )}
 
-        <ReactPlayer
-          width={760}
-          height={428}
-          className="p-0 m-0"
-          src={`https://www.youtube.com/watch?v=${trailer?.[0]?.key}`}
-        />
+        {trailer ? (
+          <div className="w-full lg:flex-1 aspect-video lg:aspect-auto lg:h-[428px]">
+            <ReactPlayer
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/watch?v=${trailer.key}`}
+            />
+          </div>
+        ) : (
+          <div className="flex w-full lg:flex-1 aspect-video lg:aspect-auto lg:h-[428px] items-center justify-center bg-muted text-muted-foreground">
+            Trailer not found
+          </div>
+        )}
 
         {/* {movie?.backdrop_path && (
           <Image

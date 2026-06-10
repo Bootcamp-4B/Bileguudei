@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { tmdb } from "@/lib/tmdb";
 
 interface crewType {
   adult: boolean;
@@ -73,42 +73,27 @@ export const MovieDetails = () => {
   const [stars, setStars] = useState<crewType[]>([]);
 
   useEffect(() => {
-    axios
-      .get(`https://api.themoviedb.org/3/movie/${params.id}`, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMWFjODI3ZGU0ZTkzMDE5OGE1YzI4YTAyZWYwNDMxMCIsIm5iZiI6MTc3OTI5NjIzNC4yMjUsInN1YiI6IjZhMGRlN2VhMzczYmNhZjA2OGEyYjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b1LM9DOJgB7NGZu04MmF9rsXfk5TcQbTg3i1yPZBrEE",
-        },
-      })
-      .then((response) => {
-        // console.log(response.data);
-        setMovie(response.data);
-      });
-    axios
-      .get(`https://api.themoviedb.org/3/movie/${params.id}/credits`, {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMWFjODI3ZGU0ZTkzMDE5OGE1YzI4YTAyZWYwNDMxMCIsIm5iZiI6MTc3OTI5NjIzNC4yMjUsInN1YiI6IjZhMGRlN2VhMzczYmNhZjA2OGEyYjgxZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.b1LM9DOJgB7NGZu04MmF9rsXfk5TcQbTg3i1yPZBrEE",
-        },
-      })
-      .then((response) => {
-        const directors = response.data.crew.filter(
-          (person: crewType) => person.known_for_department === "Directing",
-        );
+    tmdb.get(`/movie/${params.id}`).then((response) => {
+      setMovie(response.data);
+    });
+    tmdb.get(`/movie/${params.id}/credits`).then((response) => {
+      const directors = response.data.crew.filter(
+        (person: crewType) => person.known_for_department === "Directing",
+      );
 
-        const writers = response.data.crew.filter(
-          (person: crewType) => person.known_for_department === "Writing",
-        );
+      const writers = response.data.crew.filter(
+        (person: crewType) => person.known_for_department === "Writing",
+      );
 
-        setDirecting(directors);
-        setWriting(writers);
-        setStars(response.data.cast);
-      });
+      setDirecting(directors);
+      setWriting(writers);
+      setStars(response.data.cast);
+    });
   }, [params.id]);
 
   if (!movie) {
     return (
-      <div className="w-[1080px] flex flex-col gap-[20px]">
+      <div className="w-full max-w-[1080px] flex flex-col gap-[20px]">
         <div className="flex gap-[12px]">
           <Skeleton className="h-7 w-20 rounded-full" />
           <Skeleton className="h-7 w-20 rounded-full" />
@@ -125,13 +110,13 @@ export const MovieDetails = () => {
   return (
     <div
       id="MovieDescription"
-      className="w-[1080px] h-[271px] flex flex-col gap-[20px] "
+      className="w-full max-w-[1080px] flex flex-col gap-[20px] "
     >
       <div id="genres" className="flex gap-[12px] items-center">
         {movie?.genres?.map((genre, index) => {
           return (
             <Badge
-              className="flex text-black py-[2px] px-[10px] gap-[10px] border-[1px] rounded-[9999px] border-solid bg-white border-[#E4E4E7]"
+              className="flex text-foreground py-[2px] px-[10px] gap-[10px] border-[1px] rounded-[9999px] border-solid bg-background border-border"
               key={index + Math.random()}
             >
               {genre.name}
@@ -140,7 +125,7 @@ export const MovieDetails = () => {
         })}
       </div>
 
-      <p className="text-[#09090B] text-[16px] leading-[24px]">
+      <p className="text-foreground text-[16px] leading-[24px]">
         {movie?.overview}
       </p>
 

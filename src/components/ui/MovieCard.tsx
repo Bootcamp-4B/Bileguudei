@@ -21,8 +21,8 @@ const MovieCard = ({
   if (cardChoice === 1) {
     return (
       <Link href={`/${movieLink}`}>
-        <Card className="w-[230px] gap-0 py-0">
-          <div className="relative h-[340px] w-full">
+        <Card className="w-full gap-0 py-0">
+          <div className="relative aspect-[2/3] w-full">
             <Image
               alt={title}
               src={imgUrl}
@@ -49,8 +49,8 @@ const MovieCard = ({
   } else {
     return (
       <Link href={`/${movieLink}`}>
-        <Card className="w-[190px] gap-0 py-0">
-          <div className="relative h-[340px] w-full">
+        <Card className="w-full gap-0 py-0">
+          <div className="relative aspect-[2/3] w-full">
             <Image
               alt={title}
               src={imgUrl}
