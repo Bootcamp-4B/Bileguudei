@@ -119,12 +119,12 @@ const MyCarousel = () => {
                   </DialogTrigger>
 
                   <DialogContent
-                    className="w-[92vw] max-w-[1000px] flex items-center justify-center border-none bg-transparent p-0 shadow-none"
+                    className="!w-[92vw] !max-w-[1200px] flex items-center justify-center border-none bg-transparent p-0 shadow-none"
                     showCloseButton={false}
                   >
                     <DialogTitle className="w-full">
                       {selectedTrailer && (
-                        <div className="aspect-video w-full overflow-hidden rounded-md">
+                        <div className="aspect-video w-full overflow-hidden rounded-lg">
                           <ReactPlayer
                             width="100%"
                             height="100%"

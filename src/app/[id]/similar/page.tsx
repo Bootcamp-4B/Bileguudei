@@ -58,14 +58,14 @@ export default function SimilarPage() {
   };
 
   return (
-    <div className="px-[80px] flex flex-col gap-[32px] w-full">
+    <div className="px-4 sm:px-6 lg:px-20 flex flex-col gap-[32px] w-full">
       <MyNav></MyNav>
       <div className="flex justify-between">
         <h2 className="w-[198px] h-[32px] text-foreground text-[24px] font-semibold leading-[32px] tracking-[-0.6px]">
           More like this
         </h2>
       </div>
-      <div className="grid grid-cols-5 w-full gap-[32px] justify-items-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 w-full gap-4 lg:gap-8">
         {isLoading ? (
           <MovieCardSkeletonList count={20} />
         ) : (

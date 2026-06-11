@@ -20,8 +20,8 @@ const MovieCard = ({
 }: MovieCardProps) => {
   if (cardChoice === 1) {
     return (
-      <Link href={`/${movieLink}`}>
-        <Card className="w-full gap-0 py-0">
+      <Link href={`/${movieLink}`} className="block h-full w-full">
+        <Card className="h-full w-full gap-0 py-0">
           <div className="relative aspect-[2/3] w-full">
             <Image
               alt={title}
@@ -41,15 +41,17 @@ const MovieCard = ({
                 <span>{rating}</span>/10
               </p>
             </div>
-            <h4 className="text-[18px] h-[56px] w-full">{title}</h4>
+            <h4 className="line-clamp-2 h-[56px] w-full text-[18px]">
+              {title}
+            </h4>
           </CardFooter>
         </Card>
       </Link>
     );
   } else {
     return (
-      <Link href={`/${movieLink}`}>
-        <Card className="w-full gap-0 py-0">
+      <Link href={`/${movieLink}`} className="block h-full w-full">
+        <Card className="h-full w-full gap-0 py-0">
           <div className="relative aspect-[2/3] w-full">
             <Image
               alt={title}
@@ -69,7 +71,9 @@ const MovieCard = ({
                 <span>{rating}</span>/10
               </p>
             </div>
-            <h4 className="text-[18px] h-[56px] w-full">{title}</h4>
+            <h4 className="line-clamp-2 h-[56px] w-full text-[18px]">
+              {title}
+            </h4>
           </CardFooter>
         </Card>
       </Link>
